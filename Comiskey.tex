@@ -1,0 +1,337 @@
+
+\documentclass{beamer}
+
+\mode<presentation>
+{
+  \usetheme{Warsaw}
+  \setbeamercovered{transparent}
+  \setbeamertemplate{headline}{}
+  \setbeamertemplate{footer}{\hbox{test}}
+}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{times}
+\usepackage[T1]{fontenc}
+
+% \usepackage{fullpage}
+% \usepackage{setspace}
+% \onehalfspacing
+\usepackage{amsmath, amsthm, amssymb, amsfonts}
+\usepackage{mathtools}
+ \usepackage{float}
+\usepackage{xfrac}
+
+\title[Approaches to Effective Sample Size Estimation]{Approaches to Effective Sample Size Estimation for Trend Detection in Time Series}
+
+%\subtitle
+%{Maximum Likelihood, Fisher Information, Bayesian Inference}
+
+\author{Chris Comiskey, Alix Gitelman, Charlotte Wickham} 
+
+\institute{Oregon State University} 
+
+
+\date{\today} 
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+
+\begin{frame}{Introduction: Trend Detection}{} %%%%%%%%%%%%%%%%%%%%%
+Which AR(1) time series has trend? \\
+	\begin{figure}[] 
+	\centering
+	\includegraphics[scale=.3]{AR1_1.pdf} \\
+ 	\includegraphics[scale=.3]{AR1_2.pdf}
+	\end{figure}
+\end{frame}
+
+
+\begin{frame}{Introduction: Trend Detection}{} %%%%%%%%%%%%%%%%%%%%%
+Trick question... neither! \\
+	\begin{figure}[] 
+	\centering
+	\includegraphics[scale=.3]{AR1_1.pdf} \\
+ 	\includegraphics[scale=.3]{AR1_2.pdf}
+	\end{figure}
+\end{frame}
+
+
+
+\begin{frame}{Trend is Tricky}{}  %%%%%%%%%%%%%%%%%%%%%
+{\Large Autocorrelation Autocorrelation Autocorrelation} \\
+
+\begin{itemize}
+\item Autocorrelation complicates trend detection
+	\begin{itemize}
+	\item Trend = change in the mean
+	\end{itemize}
+\item Effective Sample Size (ESS)
+\item $ESS_{\mu}  = \frac{n^{2}}{\mathbf{1}'\Sigma_{\rho} \mathbf{1}} = n \left( \frac{n}{\mathbf{1}'\Sigma_{\rho} \mathbf{1}} \right)$
+	\begin{itemize}
+	\item \cite{HB46}
+	\item For $iid$ observations: $\text{Var}(\bar{x}) = \frac{\sigma^{2}}{n}$
+	\item For positively correlated observations: $\text{Var}(\bar{x}) > \frac{\sigma^{2}}{n}$
+	\end{itemize}
+\item Use ESS to modify trend detection tests
+	\begin{itemize}
+	\item ESS for the \textit{mean}
+	\end{itemize}
+
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Focus on AR(1) Time Series}  %%%%%%%%%%%%%%%%%%%%%
+A series of observations $X_{1}, X_{2}, \dots, X_{100}$, where
+{\huge $$X_{t} = \alpha X_{t-1} + Z_{t}. $$}
+
+\begin{itemize}
+\item $0 \leq \alpha < 1$
+	\begin{itemize}
+	\item Stationary
+	\end{itemize}
+\item $Z_{t} \stackrel{iid}{\sim} N(0,1)$
+\item  $X_{t} \sim N\left(0, \frac{1}{1-\alpha^{2}}\right)$
+\item $X_{t}|X_{t-1} \sim N\left(\alpha X_{t-1}, 1 \right) $
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Effective Sample Size}  %%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+\item Attempt to quantify information content
+\item As autocorrelation increases, ESS decreases.
+\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics[scale = 0.3]{JSM1.pdf}
+\end{figure}
+
+Can we estimate ESS effectively?
+
+\end{frame}
+
+
+\begin{frame}{Effective Sample Size: MLE Estimation}  %%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+\item For every correlation parameter $\alpha$, 100 simulated AR(1) series, and 100 estimates $\hat{\alpha}_{MLE}$
+\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics[scale = 0.3]{JSM2.pdf}
+\end{figure}
+
+\cite{IEESS}
+
+\end{frame}
+
+\begin{frame}{Effective Sample Size: Fisher Information}  %%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+\item Back to drawing board...
+\item Could Fisher Information serve as a proxy?
+\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics[scale = 0.3]{JSM1.pdf}
+\end{figure}
+
+Let's take a look.
+
+\end{frame}
+
+
+\begin{frame}{Effective Sample Size: Fisher Information}  %%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+\item Back to drawing board...
+\item Could \textcolor{red}{\bf Fisher Information} serve as a proxy for \textcolor{blue}{\bf ESS}?
+\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics[scale = 0.3]{JSM3.pdf}
+\end{figure}
+
+Sure could.
+
+\end{frame}
+
+
+\begin{frame}{Effective Sample Size: Fisher Information}  %%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+\item Is estimation any easier?
+\item More simulations.
+\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics[scale = 0.3]{JSM3.pdf}
+\end{figure}
+
+Drumroll...
+
+\end{frame}
+
+
+
+\begin{frame}{Effective Sample Size: Fisher Information Estimation}  %%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+\item For every  $\alpha$, 100 simulated AR(1) series
+\item 100 MLE estimates of \color{red}{\large{FI}}.
+\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics[scale = 0.3]{JSM4.pdf}
+\end{figure}
+
+Results virtually identical. Why?
+
+\end{frame}
+
+
+\begin{frame}{AR(1) Correlation Parameter: \huge{$\alpha$}}  %%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+\item {\huge $X_{t} = {\color{red} {\alpha}} X_{t-1} + Z_{t}$}
+\item The asymptotic distribution of $\hat{\alpha}_{MLE}$ for an AR(1) series of length n is:
+
+	$$ \hat{\alpha}_{n} \xrightarrow{d} N\left(\alpha, \frac{1-\alpha^{2}}{n}\right). $$
+
+\item Too large for practical use.
+\item Back to the drawing board...
+
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Bayesian Paradigm}  %%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+\item We {\bf have} "Prior Information"
+	\begin{itemize}
+	\item No shortage of hydrologic data
+	\end{itemize}
+\item Thomas Bayes to the rescue!
+\item The Bayesian posterior distribution for $\alpha$ given $\mathbf{X}$ is: $$ f(\mathbf{\alpha} |\mathbf{X}) \propto f(\mathbf{X} |\mathbf{\alpha}) \color{blue}{ f(\mathbf{\alpha})} $$
+\item {\color{blue}{$f(\mathbf{\alpha})$}} can incorporate prior information
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Beta Priors on \huge{$\alpha$}}  %%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+\item Beta family is natural choice for prior on $\alpha$, with $[0,1)$ support.
+\item For $\alpha \sim Beta(\alpha_{1}, \beta_{1})$, we have
+$$ E[\alpha] = \frac{\alpha_{1}}{(\alpha_{1} + \beta_{1})} $$
+$$ Var[\alpha] = \frac{ \alpha_{1} \beta_{1} }{ (\alpha_{1} + \beta_{1})^{2} (\alpha_{1} + \beta_{1} + 1) } $$
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Beta Priors on \huge{$\alpha$}}  %%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+\item Suppose data indicates $\alpha = 0.25$
+\item Three Beta priors---same mean, different variance
+\end{itemize}
+
+\begin{figure}
+\includegraphics[scale = 0.17]{JSM5.pdf}
+\includegraphics[scale = 0.17]{JSM6.pdf}
+\includegraphics[scale = 0.17]{JSM7.pdf}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Bayesian Estimation of ESS, Beta Prior}
+How much better do we do?
+\begin{figure}
+\includegraphics[scale = 0.4]{JSM8}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Bayesian Estimation of ESS, Beta Prior}
+How much better do we do?
+\begin{figure}
+\includegraphics[scale = 0.4]{JSM9}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Bayesian Estimation of ESS, Beta Prior}
+How much better do we do?
+\begin{figure}
+\includegraphics[scale = 0.4]{JSM10}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Bayesian Estimation of ESS, Beta Prior}{}
+{\bf Victory!} ...Victory? Not exactly.
+\begin{figure}
+\includegraphics[scale = 0.4]{JSM10}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Bayesian Estimation of ESS -- The Catch}{}
+There is no such thing as a free lunch.
+
+\begin{itemize}
+\item Beta priors are shifting to have mean equal to true mean
+\item Of course we do better
+\item Key point: we do a {\bf lot} better with a {\bf little} help
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}{Bayesian Space-Time Hierarchical Models}{}
+
+     \begin{columns}[T] 
+	     \begin{column}[T]{5cm} 
+
+\begin{itemize}
+\item Streams exist in networks
+\item Networks are spatially and temporally correlated
+\item Key point: we can use this information
+\end{itemize}
+
+	     \end{column}
+	     \begin{column}[T]{5cm} 
+
+\begin{figure}[H]
+\includegraphics[scale = 0.4]{JSM11}
+\end{figure}
+
+	     \end{column}
+     \end{columns}
+
+\end{frame}
+
+
+
+\bibliographystyle{plainnat}
+\bibliography{Info}
+
+
+
+\end{document}
+
+
+
